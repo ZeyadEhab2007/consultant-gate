@@ -2,29 +2,30 @@ import { DataSource } from 'typeorm';
 
 export const specialties = [
   {
-    name: 'Cardiology',
-    slug: 'cardiology',
-    description: 'Heart and cardiovascular diseases',
+    name: 'Software Engineering',
+    slug: 'software-engineering',
+    description: 'Software design, architecture, and engineering practices',
   },
   {
-    name: 'Dermatology',
-    slug: 'dermatology',
-    description: 'Skin, hair, and nail conditions',
+    name: 'Web Development',
+    slug: 'web-development',
+    description: 'Building and maintaining modern web applications',
   },
   {
-    name: 'Neurology',
-    slug: 'neurology',
-    description: 'Brain and nervous system disorders',
+    name: 'Mobile Development',
+    slug: 'mobile-development',
+    description: 'Developing applications for mobile platforms',
   },
   {
-    name: 'Pediatrics',
-    slug: 'pediatrics',
-    description: 'Medical care for infants and children',
+    name: 'Data Science & AI',
+    slug: 'data-science-ai',
+    description: 'Data analysis, machine learning, and artificial intelligence',
   },
   {
-    name: 'Orthopedics',
-    slug: 'orthopedics',
-    description: 'Bones, joints, and musculoskeletal conditions',
+    name: 'Cybersecurity',
+    slug: 'cybersecurity',
+    description:
+      'Information security, application security, and threat protection',
   },
 ];
 
@@ -33,12 +34,15 @@ export async function seedSpecialties(dataSource: DataSource) {
     await dataSource.query(
       `
         INSERT INTO specialties (
-          name,
-          slug,
-          description
-        )
-        VALUES ($1, $2, $3)
-        ON CONFLICT DO NOTHING
+  name,
+  slug,
+  description
+)
+VALUES ($1, $2, $3) 
+ON CONFLICT (slug)
+DO UPDATE SET
+  name = EXCLUDED.name,
+  description = EXCLUDED.description;
       `,
       [specialty.name, specialty.slug, specialty.description],
     );

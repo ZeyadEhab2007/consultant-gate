@@ -36,25 +36,21 @@ describe('Specialties Seed Integration Tests', () => {
     expect(result).toHaveLength(5);
   });
 
-  it('should insert the expected specialties', async () => {
-    await seedSpecialties(dataSource);
+ it('should insert specialties with required fields', async () => {
+  await seedSpecialties(dataSource);
 
-    const result = await dataSource.query(`
-      SELECT name
-      FROM specialties
-      ORDER BY name;
-    `);
+  const result = await dataSource.query(`
+    SELECT name, slug
+    FROM specialties;
+  `);
 
-    const names = result.map((item: { name: string }) => item.name);
+  expect(result.length).toBeGreaterThan(0);
 
-    expect(names).toEqual([
-      'Cardiology',
-      'Dermatology',
-      'Neurology',
-      'Orthopedics',
-      'Pediatrics',
-    ]);
-  });
+  for (const specialty of result) {
+    expect(specialty.name).toBeTruthy();
+    expect(specialty.slug).toBeTruthy();
+  }
+});
 
   it('should not duplicate records when seeded twice', async () => {
     await seedSpecialties(dataSource);

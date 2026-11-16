@@ -1,7 +1,10 @@
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+
 import { DatabaseService } from './database.service';
+import { buildDataSourceOptions } from './data-source-options';
 
 @Module({
   imports: [
@@ -9,22 +12,15 @@ import { DatabaseService } from './database.service';
       inject: [ConfigService],
 
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        ...buildDataSourceOptions({
+          host: configService.getOrThrow<string>('DB_HOST'),
+          port: configService.getOrThrow<number>('DB_PORT'),
+          username: configService.getOrThrow<string>('DB_USERNAME'),
+          password: configService.getOrThrow<string>('DB_PASSWORD'),
+          database: configService.getOrThrow<string>('DB_NAME'),
+        }),
 
-        host: configService.getOrThrow<string>('DB_HOST'),
-        port: configService.getOrThrow<number>('DB_PORT'),
-        username: configService.getOrThrow<string>('DB_USERNAME'),
-        password: configService.getOrThrow<string>('DB_PASSWORD'),
-        database: configService.getOrThrow<string>('DB_NAME'),
-
-        autoLoadEntities: true,
         manualInitialization: true,
-        synchronize: false,
-
-        logging:
-          configService.get<string>('NODE_ENV') === 'development'
-            ? ['query', 'error']
-            : ['error'],
       }),
     }),
   ],

@@ -55,6 +55,37 @@ describe('Specialties Constraints Integration Tests', () => {
     ).rejects.toHaveProperty('code', '23505');
   });
 
+  it('should reject specialty names with different letter casing', async () => {
+    await dataSource.query(
+      `
+        INSERT INTO specialties (name, slug)
+        VALUES ($1, $2);
+      `,
+      ['Software Engineering', 'software-engineering'],
+    );
+
+    await expect(
+      dataSource.query(
+        `
+          INSERT INTO specialties (name, slug)
+          VALUES ($1, $2);
+        `,
+        ['software engineering', 'software-engineering-alt'],
+      ),
+    ).rejects.toHaveProperty('code', '23505');
+  });
+
+  it('should reject slugs with invalid format', async () => {
+    await expect(
+      dataSource.query(
+        `
+          INSERT INTO specialties (name, slug)
+          VALUES ($1, $2);
+        `,
+        ['Web Development', 'Web Development!'],
+      ),
+    ).rejects.toHaveProperty('code', '23514');
+  });
   it('should reject duplicate specialty slugs', async () => {
     await dataSource.query(
       `

@@ -88,4 +88,35 @@ describe('Specialties Migration Integration Tests', () => {
       expect(column.is_nullable).toBe('NO');
     }
   });
+  it('should automatically update updated_at when a specialty is updated', async () => {
+    const [specialty] = await dataSource.query(`
+    INSERT INTO specialties (name, slug)
+    VALUES ('Test Specialty', 'test-specialty')
+    RETURNING created_at, updated_at;
+  `);
+
+    await dataSource.query('SELECT pg_sleep(0.01);');
+
+const [updatedRows] = await dataSource.query(`
+  UPDATE specialties
+  SET name = 'Updated Test Specialty'
+  WHERE slug = 'test-specialty'
+  RETURNING created_at, updated_at;
+`);
+
+const [updatedSpecialty] = updatedRows;
+
+
+
+console.log('specialty:', specialty);
+console.log('updatedSpecialty:', updatedSpecialty);
+console.log('updatedSpecialty keys:', Object.keys(updatedSpecialty ?? {}));
+    expect(updatedSpecialty.updated_at.getTime()).toBeGreaterThan(
+      specialty.updated_at.getTime(),
+    );
+
+    expect(updatedSpecialty.created_at.getTime()).toBe(
+      specialty.created_at.getTime(),
+    );
+  });
 });

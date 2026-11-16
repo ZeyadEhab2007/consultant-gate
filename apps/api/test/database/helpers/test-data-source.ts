@@ -1,4 +1,3 @@
-
 import 'reflect-metadata';
 
 import { DataSource } from 'typeorm';
@@ -11,7 +10,6 @@ dotenv.config({
   path: path.resolve(__dirname, '../../../../api/.env.test'),
   override: true,
 });
-
 
 const allowedHosts = ['localhost', '127.0.0.1', '::1'];
 

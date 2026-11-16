@@ -1,4 +1,3 @@
-
 import path from 'node:path';
 import type { DataSourceOptions } from 'typeorm';
 
@@ -23,20 +22,13 @@ export function buildDataSourceOptions(
     password: config.password,
     database: config.database,
 
-    entities: [
-      path.join(__dirname, '..', '**', '*.entity{.ts,.js}'),
-    ],
+    entities: [path.join(__dirname, '..', '**', '*.entity{.ts,.js}')],
 
-    migrations: [
-      path.join(__dirname, 'migration', '*{.ts,.js}'),
-    ],
+    migrations: [path.join(__dirname, 'migration', '*{.ts,.js}')],
 
     synchronize: false,
     migrationsRun: false,
 
-    logging:
-      config.nodeEnv === 'development'
-        ? ['query', 'error']
-        : ['error'],
+    logging: config.nodeEnv === 'development' ? ['query', 'error'] : ['error'],
   };
 }

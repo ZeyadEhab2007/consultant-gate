@@ -97,20 +97,18 @@ describe('Specialties Migration Integration Tests', () => {
 
     await dataSource.query('SELECT pg_sleep(0.01);');
 
-const [updatedRows] = await dataSource.query(`
+    const [updatedRows] = await dataSource.query(`
   UPDATE specialties
   SET name = 'Updated Test Specialty'
   WHERE slug = 'test-specialty'
   RETURNING created_at, updated_at;
 `);
 
-const [updatedSpecialty] = updatedRows;
+    const [updatedSpecialty] = updatedRows;
 
-
-
-console.log('specialty:', specialty);
-console.log('updatedSpecialty:', updatedSpecialty);
-console.log('updatedSpecialty keys:', Object.keys(updatedSpecialty ?? {}));
+    console.log('specialty:', specialty);
+    console.log('updatedSpecialty:', updatedSpecialty);
+    console.log('updatedSpecialty keys:', Object.keys(updatedSpecialty ?? {}));
     expect(updatedSpecialty.updated_at.getTime()).toBeGreaterThan(
       specialty.updated_at.getTime(),
     );

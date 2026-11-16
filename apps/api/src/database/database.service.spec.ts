@@ -1,4 +1,3 @@
-
 import { DataSource } from 'typeorm';
 import { DatabaseService } from './database.service';
 
@@ -65,14 +64,13 @@ describe('DatabaseService', () => {
     expect(dataSource.destroy).not.toHaveBeenCalled();
   });
 
-it('should not attempt a new connection after shutdown starts', async () => {
-  dataSource.initialize.mockResolvedValue(dataSource);
+  it('should not attempt a new connection after shutdown starts', async () => {
+    dataSource.initialize.mockResolvedValue(dataSource);
 
-  await service.onModuleDestroy();
+    await service.onModuleDestroy();
 
-  await service.connect();
+    await service.connect();
 
-  expect(dataSource.initialize).not.toHaveBeenCalled();
-});
-
+    expect(dataSource.initialize).not.toHaveBeenCalled();
+  });
 });

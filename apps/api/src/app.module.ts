@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HealthModule } from './health/health.module';
 import Joi from 'joi';
-
+import { SpecialtiesModule } from './specialties/specialties.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -32,6 +32,7 @@ import Joi from 'joi';
     }),
     DatabaseModule,
     HealthModule,
+    SpecialtiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

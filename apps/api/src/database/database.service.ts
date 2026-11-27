@@ -56,7 +56,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       }
     } catch (error) {
       this.logger.warn(
-        `Database unavailable because of ${error}. Retrying in ${this.retryIntervalMs / 1000} seconds...`,
+        `Database unavailable because of ${String(error)}. Retrying in ${this.retryIntervalMs / 1000} seconds...`,
       );
     }
   }

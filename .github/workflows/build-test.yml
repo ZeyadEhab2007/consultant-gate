@@ -60,6 +60,8 @@ jobs:
 
       - name: Run unit tests
         run: pnpm test
+        env:
+          VITE_API_URL: http://localhost:3000
 
       - name: Run database migrations
         run: pnpm --filter api migration:run
